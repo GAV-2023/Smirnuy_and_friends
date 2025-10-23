@@ -1,5 +1,508 @@
+!DOCTYPE html>
 <html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Два пончика и чашка кофе - Ваша уютная кофейня</title>
+    <style>
+        /* CSS стили */
+        @import url('https://fonts.googleapis.com/css2?family=Marck+Script&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #6B4F4B;
+            --secondary-color: #FDF5E6;
+            --accent-color: #A0522D;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Навигация */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(107, 79, 75, 0.9);
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-family: 'Marck Script', cursive;
+            font-size: 2rem;
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .navbar .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 20px;
+        }
+
+        .navbar .nav-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Главный раздел */
+        #hero {
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1512568400610-62da2848a094?q=80&w=1974&auto=format&fit=crop') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #hero .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        #hero h1 {
+            font-family: 'Marck Script', cursive;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        #hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 30px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Раздел О компании */
+        #about {
+            padding: 80px 0;
+        }
+
+        #about h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-family: 'Marck Script', cursive;
+            font-size: 3rem;
+        }
+
+        #about p {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Раздел Меню */
+        #menu {
+            padding: 80px 0;
+            background: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop') no-repeat center center/cover;
+        }
+
+        #menu h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-family: 'Marck Script', cursive;
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+
+        .menu-items {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .menu-item {
+            background-color: var(--secondary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 250px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .menu-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .menu-item h3 {
+            font-family: 'Marck Script', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: var(--secondary-color);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from {opacity: 0; transform: scale(0.9);}
+            to {opacity: 1; transform: scale(1);}
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #order-form h3 {
+            font-family: 'Marck Script', cursive;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Раздел Контакты */
+        #contact {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        #contact h2 {
+            margin-bottom: 40px;
+            font-family: 'Marck Script', cursive;
+            font-size: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .contact-details, .map {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .map iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+            }
+            #hero h1 {
+                font-size: 3rem;
+            }
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
 <body>
-<h1>Проверка</h1>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">Два пончика и чашка кофе</a>
+            <ul class="nav-links">
+                <li><a href="#hero">Главная</a></li>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#menu">Меню</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h1>Идеальный дуэт для вашего настроения</h1>
+            <p>Свежесваренный кофе и нежнейшие пончики ждут вас</p>
+            <a href="#menu" class="btn">Посмотреть меню</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2>Наша история</h2>
+            <p>
+                "Два пончика и чашка кофе" родилась из простой идеи: создать место, где каждый мог бы на минуту отвлечься от суеты и насладиться простыми радостями жизни. Мы верим, что идеальное утро начинается с аромата свежего кофе и вкуса теплого, тающего во рту пончика. Наша история - это история любви к качественным ингредиентам, традиционным рецептам и, конечно же, к нашим гостям.
+            </p>
+        </div>
+    </section>
+
+    <section id="menu">
+        <div class="container">
+            <h2>Наши хиты</h2>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Латте">
+                    <img src="https://images.unsplash.com/photo-1572442388828-a616c703b44b?q=80&w=1974&auto=format&fit=crop" alt="Латте">
+                    <h3>Латте ☕</h3>
+                </div>
+                <div class="menu-item" data-name="Капучино">
+                    <img src="https://images.unsplash.com/photo-1557006024-4251016f4088?q=80&w=1974&auto=format&fit=crop" alt="Капучино">
+                    <h3>Капучино 🥛</h3>
+                </div>
+                <div class="menu-item" data-name="Эспрессо">
+                    <img src="https://images.unsplash.com/photo-1610890691341-3f695a121544?q=80&w=1974&auto=format&fit=crop" alt="Эспрессо">
+                    <h3>Эспрессо 🔥</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <form id="order-form" action="https://formspree.io/f/xnngejng" method="POST">
+                 <h3 id="modal-title">Вы хотите заказать...</h3>
+                 <input type="hidden" name="_subject" id="email-subject">
+                 <input type="hidden" name="Напиток" id="coffee-name-input">
+                <div class="form-group">
+                    <label for="quantity">Количество</label>
+                    <input type="number" id="quantity" name="Количество" required min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="address">Адрес доставки</label>
+                    <input type="text" id="address" name="Адрес" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="Email" required>
+                </div>
+                 <input type="hidden" name="_next" value="https://your-thank-you-page.com" />
+                 <input type="hidden" name="_replyto" value="email">
+                 <input type="hidden" name="_cc" value="ooo.gros@yandex.ru">
+                 <button type="submit" class="btn">Отправить заказ</button>
+            </form>
+        </div>
+    </div>
+    
+    <section id="contact">
+        <div class="container">
+            <h2>Как нас найти</h2>
+            <div class="contact-info">
+                <div class="contact-details">
+                    <h3>Часы работы</h3>
+                    <p>Пн - Пт: 8:00 - 20:00</p>
+                    <p>Сб - Вс: 10:00 - 21:00</p>
+                    <h3>Адрес</h3>
+                    <p>г. Примерный, ул. Уютная, д. 15</p>
+                </div>
+                <div class="map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.394916893635!2d37.6155650159306!3d55.75222008055318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a5a1f6a2e4b%3A0x4c2d2a4a75a7c2e0!2z0JzQkNCb0JjQnNCw!5e0!3m2!1sru!2sru!4v1678886400000!5m2!1sru!2sru" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // JavaScript логика
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('orderModal');
+            const closeBtn = document.querySelector('.close-btn');
+            const menuItems = document.querySelectorAll('.menu-item');
+            const modalTitle = document.getElementById('modal-title');
+            const coffeeNameInput = document.getElementById('coffee-name-input');
+            const emailSubjectInput = document.getElementById('email-subject');
+            const form = document.getElementById('order-form');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const coffeeName = item.getAttribute('data-name');
+                    modalTitle.innerText = `Вы хотите заказать - ${coffeeName}`;
+                    coffeeNameInput.value = coffeeName;
+                    emailSubjectInput.value = `Новый заказ: ${coffeeName}`;
+                    modal.style.display = 'block';
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const quantity = document.getElementById('quantity').value;
+                const address = document.getElementById('address').value;
+                const email = document.getElementById('email').value;
+
+                if (!quantity || !address || !email) {
+                    alert('Пожалуйста, заполните все поля.');
+                    return;
+                }
+                
+                let formData = new FormData(form);
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        modal.style.display = 'none';
+                        form.reset();
+                        alert('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.');
+                        
+                        // Отправка письма клиенту через Formspree
+                        const coffeeName = coffeeNameInput.value;
+                        const customerEmail = email;
+                        
+                        const emailData = {
+                          _to: customerEmail,
+                          _subject: "Ваш заказ в 'Два пончика и чашка кофе'",
+                          message: `Вы сделали заказ - ${coffeeName}, количество: ${quantity}. Ждем вас снова!`,
+                          // Эти поля обязательны для Formspree
+                          _gotcha: '', // honeypot
+                          name: 'Два пончика и чашка кофе'
+                        };
+
+                        fetch(form.action, {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                          },
+                          body: JSON.stringify(emailData)
+                        });
+                        
+                    } else {
+                        response.json().then(data => {
+                            if (Object.hasOwn(data, 'errors')) {
+                                alert(data["errors"].map(error => error["message"]).join(", "))
+                            } else {
+                                alert('Произошла ошибка при отправке заказа.');
+                            }
+                        })
+                    }
+                }).catch(error => {
+                    alert('Произошла ошибка при отправке заказа.');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
